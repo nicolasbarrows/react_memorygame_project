@@ -1,18 +1,21 @@
 /* Add custom styling here */
-body {
+main {
     display: flex;
-    justify-content: center;
+    flex-direction:column;
     align-items: center;
+    justify-content: center;
+    height:100vh;
+    width:100vw;
 }
 .gameBoard {
-    background-color: black;
-    width: 80vh;
-    height: 80vh;
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    margin: auto;
+    max-height: 80vw;
+    max-width:80vw;
+    aspect-ratio: 1/1;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     list-style: none;
-
 }
 
 .card {
@@ -21,10 +24,51 @@ body {
     justify-content: center;
     align-items: center;
     background-color:aqua;
-    margin: 10px;
     list-style:none;
-    border-radius: 15px;
+    border-style: solid;
+    border-width: 5px;
+    border-radius: 20px;
+    font-size: 3em;
 }
+
 .card:hover {
+    box-shadow:inset 4px 4px 4px 4px #4b4b4b;
     content-visibility:visible;
+    
+}
+
+.flipped {
+    content-visibility: visible;
+  }
+
+  .hidden {
+    content-visibility: hidden;
+  }
+
+@media only screen and (max-width: 600px) {
+    .gameBoard {
+        width: 90vw;
+        height: 90vw;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .gameBoard {
+        width: 80vw;
+        height: 80vw;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .gameBoard {
+        width: 80vh;
+        height: 80vh;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .gameBoard {
+        width: 80vh;
+        height: 80vh;
+    }
 }

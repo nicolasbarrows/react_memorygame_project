@@ -5,17 +5,12 @@ import GameBoard from "./components/GameBoard";
 class App extends Component {
   render() {
     return (
-      <main
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          textAlign: "center",
-        }}
-      >
+      <main>
         <h1>React: Memory Game Project</h1>
         {/*INSERT GAMEBOARD HERE*/}
-        <GameBoard></GameBoard>
+        <GameBoard>
+          {/*The Gameboard Class creates a number of Cards Here*/}
+        </GameBoard>
         {/*INSERT SCOREBOARD HERE*/}
       </main>
     );
