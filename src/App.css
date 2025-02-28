@@ -1,1 +1,30 @@
 /* Add custom styling here */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.gameBoard {
+    background-color: black;
+    width: 80vh;
+    height: 80vh;
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    list-style: none;
+
+}
+
+.card {
+    content-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:aqua;
+    margin: 10px;
+    list-style:none;
+    border-radius: 15px;
+}
+.card:hover {
+    content-visibility:visible;
+}
