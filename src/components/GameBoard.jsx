@@ -22,6 +22,10 @@ class GameBoard extends Component {
   }
 
   componentDidMount() {
+    this.newGame();
+  }
+
+  newGame() {
     const numberOfCards = 16; //use this to change how many cards are created
     const board = this.createBoard(numberOfCards);
     const shuffled = this.shuffleBoard(board);
@@ -110,12 +114,25 @@ class GameBoard extends Component {
 
   isGameOver() {
     if (this.state.matchCount === this.state.allCards.length / 2) {
-      this.setState({ win: true });
-      console.log("GAME OVER. YOU WIN!");
       //update HighScore if applicable
-      if (this.state.tryCount < this.state.highScore && this.state.highScore) {
+      if (this.state.tryCount < this.state.highScore) {
         this.setState({ highScore: this.state.tryCount });
       }
+      //after some time reset and shuffle a new board
+      setTimeout(() => {
+        console.log("GAME OVER. YOU WIN!");
+        this.newGame();
+        this.setState((prevState) => ({
+          allCards: [],
+          flippedCards: [],
+          prevCardValue: null,
+          prevCardIndex: null,
+          matchSuccess: false,
+          matchCount: 0,
+          tryCount: 0,
+          win: false,
+        }));
+      }, 2000);
     } else {
       console.log("CONTINUE PLAYING");
     }
@@ -142,8 +159,9 @@ class GameBoard extends Component {
           ))}
         </ul>
         <div className="scoreBoard">
-          <p>Current Score: {this.state.tryCount}</p>
           <p>High Score: {this.state.highScore}</p>
+          <p>Current Score: {this.state.tryCount}</p>
+          <p>Successful Matches: {this.state.matchCount}</p>
         </div>
         <div
           className={
