@@ -1,10 +1,13 @@
-import { Component } from "react";
+import React, { Component } from "react";
+import ScoreBoard from "./ScoreBoard";
+import Card from "./Card";
 
 class GameBoard extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      numCards: 8, //how many cards to generate
       allCards: [], // Stores shuffled card values as numbers
       flippedCards: [], // stores the indeces of currently revealed cards
       prevCardValue: null,
@@ -12,8 +15,9 @@ class GameBoard extends Component {
       matchSuccess: false,
       matchCount: 0,
       tryCount: 0,
-      highScore: 0,
+      highScore: null,
       win: false,
+      feedback: "Click on Any Card.",
     };
 
     this.createBoard = this.createBoard.bind(this);
@@ -22,16 +26,25 @@ class GameBoard extends Component {
   }
 
   componentDidMount() {
-    this.newGame();
+    this.setState((prevState) => ({
+      allCards: this.newGame(this.state.numCards),
+    }));
   }
 
-  newGame() {
-    const numberOfCards = 16; //use this to change how many cards are created
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.matchCount !== this.state.matchCount &&
+      this.state.matchCount === this.state.allCards.length / 2
+    ) {
+      this.isGameOver();
+    }
+  }
+
+  newGame(num) {
+    const numberOfCards = num; //use this to change how many cards are created
     const board = this.createBoard(numberOfCards);
     const shuffled = this.shuffleBoard(board);
-    this.setState({ allCards: shuffled }, () => {
-      console.log(`ComponentDidMount - Created ${this.state.allCards}`);
-    });
+    return shuffled;
   }
 
   createBoard(cardNumber) {
@@ -64,38 +77,35 @@ class GameBoard extends Component {
     }
 
     this.setState((prevState) => ({
+      //update the click count score
       tryCount: prevState.tryCount + 1,
     }));
-    //Check chosen card against previous Card
 
+    //Check chosen card against previous Card
     if (this.state.prevCardValue === null) {
       //FIRST CARD FLIPPED
       this.setState({
         prevCardValue: cardValue,
         prevCardIndex: cardIndex,
         flippedCards: [...this.state.flippedCards, cardIndex],
+        feedback: "Now click on Another Card",
       });
     } else if (cardValue === this.state.prevCardValue) {
-      //SECOND CARD FLIPPED -> A MATCH!
-      this.setState(
-        (prevState) => ({
-          prevCardValue: null,
-          prevCardIndex: null,
-          flippedCards: [...this.state.flippedCards, cardIndex],
-          matchSuccess: true,
-          matchCount: prevState.matchCount + 1,
-        }),
-        () => {
-          //check to see if the Game is Over
-          this.isGameOver();
-        }
-      );
-      console.log("Match Found");
+      //SECOND DARD FLIPPED -> A MATCH!
+      this.setState((prevState) => ({
+        prevCardValue: null,
+        prevCardIndex: null,
+        flippedCards: [...this.state.flippedCards, cardIndex],
+        matchSuccess: true,
+        matchCount: prevState.matchCount + 1,
+        feedback: "Great job, you found a Match! Try to find more.",
+      }));
     } else {
+      //SECOND CARD FLIPPED -> NO MATCH!
       this.setState((prevState) => ({
         flippedCards: [...this.state.flippedCards, cardIndex],
+        feedback: "So sorry. Not a match. Try again.",
       }));
-      //SECOND CARD FLIPPED -> NO MATCH!
       setTimeout(() => {
         this.setState((prevState) => ({
           tryCount: prevState.tryCount + 1,
@@ -103,73 +113,74 @@ class GameBoard extends Component {
           prevCardIndex: null,
           prevCardValue: null,
           flippedCards: [],
+          matchCount: 0,
         }));
       }, 1000);
-
-      console.log("No Match: restart");
     }
 
     return null;
   }
 
   isGameOver() {
-    if (this.state.matchCount === this.state.allCards.length / 2) {
-      //update HighScore if applicable
-      if (this.state.tryCount < this.state.highScore) {
-        this.setState({ highScore: this.state.tryCount });
-      }
-      //after some time reset and shuffle a new board
-      setTimeout(() => {
-        console.log("GAME OVER. YOU WIN!");
-        this.newGame();
-        this.setState((prevState) => ({
-          allCards: [],
-          flippedCards: [],
-          prevCardValue: null,
-          prevCardIndex: null,
-          matchSuccess: false,
-          matchCount: 0,
-          tryCount: 0,
-          win: false,
-        }));
-      }, 2000);
-    } else {
-      console.log("CONTINUE PLAYING");
+    //update HighScore if applicable
+    if (
+      this.state.highScore === null ||
+      this.state.tryCount < this.state.highScore
+    ) {
+      this.setState({
+        highScore: this.state.tryCount,
+      });
     }
+    this.setState((prevState) => ({
+      feedback: "Congratulations! You Win!",
+    }));
+    setTimeout(() => {
+      //the game is over
+      //after some time reset and shuffle a new board
+      const newCardArray = this.newGame(this.state.numCards);
+      this.setState((prevState) => ({
+        allCards: newCardArray,
+        flippedCards: [],
+        prevCardValue: null,
+        prevCardIndex: null,
+        matchSuccess: false,
+        matchCount: 0,
+        tryCount: 0,
+        win: false,
+        feedback: "Now can you beat your score?",
+      }));
+    }, 2000);
   }
 
   render() {
     return (
-      //render values of allCards to the DOM as a list
-      <div>
+      <div className="appRender">
+        {/*User feedback text is here*/}
+        <h1>{this.state.feedback}</h1>
+        {/*a button to reset the game only visible after gameover*/}
+        <button
+          className="restartButton"
+          style={{ visibility: this.state.win ? "visible" : "hidden" }}
+        >
+          Play Again
+        </button>
+        {/*The game Cards are here*/}
         <ul className="gameBoard">
-          {this.state.allCards.map((name, idx) => (
-            <li
-              className={`card ${
-                this.state.flippedCards.includes(idx) ? "flipped" : ""
-              }`}
-              id={idx}
-              onClick={() => {
-                this.handleClick(name, idx);
-              }}
-              key={idx}
-            >
-              {name}
-            </li>
+          {this.state.allCards.map((value, idx) => (
+            <Card
+              flippedCardsArray={this.state.flippedCards}
+              cardValue={value}
+              cardIndex={idx}
+              onCardClick={this.handleClick}
+            ></Card>
           ))}
         </ul>
-        <div className="scoreBoard">
-          <p>High Score: {this.state.highScore}</p>
-          <p>Current Score: {this.state.tryCount}</p>
-          <p>Successful Matches: {this.state.matchCount}</p>
-        </div>
-        <div
-          className={
-            this.state.win ? "modal winner visible" : "modal winner hidden"
-          }
-        >
-          Congratulations
-        </div>
+        {/*The footer score display is here*/}
+        <ScoreBoard
+          highScore={this.state.highScore}
+          tryCount={this.state.tryCount}
+          matchCount={this.state.matchCount}
+        />
       </div>
     );
   }

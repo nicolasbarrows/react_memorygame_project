@@ -1,5 +1,12 @@
 # React: Memory Game Project
 
+## Nicolas' Version Features
+
+- Responsive Design
+- The gameboard and scoreboard
+- A Winner/Reset Modal
+- Basic structure is there so that in the future I can add a difficulty selector so that the number of cards can be adjusted for difficulty.
+
 ## Getting Started
 
 - Open your command line and navigate to your repos directory (if you do not have a repos folder, then you can use mkdir repos to create one)

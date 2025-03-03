@@ -6,12 +6,11 @@ class App extends Component {
   render() {
     return (
       <main>
-        <h1>React: Memory Game Project</h1>
-        {/*INSERT GAMEBOARD HERE*/}
         <GameBoard>
+          {/*The Gameboard Class creates a header Here*/}
           {/*The Gameboard Class creates a number of Cards Here*/}
+          {/*The Gameboard Class creates Scoreboard Here*/}
         </GameBoard>
-        {/*INSERT SCOREBOARD HERE*/}
       </main>
     );
   }

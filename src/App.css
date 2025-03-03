@@ -1,5 +1,38 @@
 /* Add custom styling here */
+* {
+    font-family: "Freckle Face", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: calc(15px + 0.390625vw);
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+  
 main {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+}
+
+h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #ca8e1b;
+    padding: 2px;
+}
+
+.appRender {
     display: flex;
     flex-direction:column;
     align-items: center;
@@ -8,33 +41,58 @@ main {
     width:100vw;
 }
 .gameBoard {
-    display:grid;
+    z-index: 0;
     margin: auto;
-    max-height: 80vw;
-    max-width:80vw;
-    aspect-ratio: 1/1;
+    list-style: none;
+    display:grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    list-style: none;
+    gap: 10px;
+    width: min(80vw, 80vh);
+    height: min(80vw, 80vh);
 }
-
+.scoreBoard {
+    z-index: 1;
+    align-self: flex-end;
+    display: flex;
+    flex-flow: row, nowrap;
+    justify-content: space-around;
+    width: 100vw;
+    height: 15vw;
+    max-height: 100px;
+    background-color:#cd4945;
+    color: #ca8e1b
+}
 .card {
-    content-visibility: hidden;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4/7;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color:aqua;
     list-style:none;
-    border-style: solid;
-    border-width: 5px;
+    border: 5px solid black;
     border-radius: 20px;
-    font-size: 3em;
+    overflow: hidden;
+}
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.card:hover {
-    box-shadow:inset 4px 4px 4px 4px #4b4b4b;
-    content-visibility:visible;
-    
+.score {
+    color:#FFFFFC;
+    font-size:xx-large;
+}
+
+.gameOverPopup {
+    background-color: #2d9964;
+    color:#ca8e1b;
+    z-index: 1;
+}
+.closeButton {
+
 }
 
 .flipped {
@@ -44,6 +102,48 @@ main {
   .hidden {
     content-visibility: hidden;
   }
+
+/* ALL THE PRETTY COLORS */
+
+.color0 {
+    background-color: #cd4945;
+}
+.color1{
+    background-color: #d87620;
+}
+.color2 {
+    background-color: #ca8e1b;
+}
+.color3{
+    background-color: #2d9964;
+}
+.color4 {
+    background-color: #2e7cd1;
+}
+.color5{
+    background-color: #8d5bc1;
+}
+.color6 {
+    background-color: #c94079;
+}
+.color7{
+    background-color: #aa755f;
+}
+.color8 {
+background-color: #d398e7;
+}
+.color9 {
+background-color: #E7D398
+}
+.color10 {
+background-color: #98E7D3
+}
+.white{
+    background-color: #FFFFFC;
+}
+.gray{
+    background-color:#7f7f7f;
+}
 
 @media only screen and (max-width: 600px) {
     .gameBoard {
