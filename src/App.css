@@ -83,23 +83,27 @@ h1 {
 
 .score {
     color:#FFFFFC;
-    font-size:xx-large;
+    font-size:2rem;
 }
 
-.gameOverPopup {
-    background-color: #2d9964;
-    color:#ca8e1b;
-    z-index: 1;
+.feedback {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
-.closeButton {
 
+.resetButton {
+    padding: 10px;
+}
+.resetButton:hover {
+background-color: #ca8e1b;
 }
 
 .flipped {
     content-visibility: visible;
   }
 
-  .hidden {
+.hidden {
     content-visibility: hidden;
   }
 

@@ -4,8 +4,7 @@
 
 - Responsive Design
 - The gameboard and scoreboard
-- A Winner/Reset Modal
-- Basic structure is there so that in the future I can add a difficulty selector so that the number of cards can be adjusted for difficulty.
+- FEATURE IN PROGRESS: Basic structure is there to add a difficulty selector input so that the number of cards can be adjusted for difficulty by user.
 
 ## Getting Started
 

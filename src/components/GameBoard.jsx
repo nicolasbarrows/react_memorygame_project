@@ -7,7 +7,7 @@ class GameBoard extends Component {
     super(props);
 
     this.state = {
-      numCards: 8, //how many cards to generate
+      numCards: 16, //how many cards to generate
       allCards: [], // Stores shuffled card values as numbers
       flippedCards: [], // stores the indeces of currently revealed cards
       prevCardValue: null,
@@ -16,8 +16,8 @@ class GameBoard extends Component {
       matchCount: 0,
       tryCount: 0,
       highScore: null,
-      win: false,
       feedback: "Click on Any Card.",
+      buttonText: "(Or Start Over)",
     };
 
     this.createBoard = this.createBoard.bind(this);
@@ -41,9 +41,19 @@ class GameBoard extends Component {
   }
 
   newGame(num) {
-    const numberOfCards = num; //use this to change how many cards are created
-    const board = this.createBoard(numberOfCards);
+    const board = this.createBoard(this.state.numCards);
     const shuffled = this.shuffleBoard(board);
+    this.setState((prevState) => ({
+      numCards: num,
+      allCards: shuffled,
+      flippedCards: [],
+      prevCardValue: null,
+      prevCardIndex: null,
+      matchSuccess: false,
+      matchCount: 0,
+      tryCount: 0,
+      feedback: "Click on Any Card.",
+    }));
     return shuffled;
   }
 
@@ -53,8 +63,6 @@ class GameBoard extends Component {
     const matches = cardNumber / 2; //number of possible matches
     const matchesArr = Array.from({ length: matches }, (_, i) => i);
     const cardArr = matchesArr.concat(matchesArr);
-
-    this.setState({ win: false });
 
     return cardArr;
   }
@@ -146,8 +154,8 @@ class GameBoard extends Component {
         matchSuccess: false,
         matchCount: 0,
         tryCount: 0,
-        win: false,
-        feedback: "Now can you beat your score?",
+        feedback: "You Won! Now can you beat your score?",
+        buttonText: "Play Again",
       }));
     }, 2000);
   }
@@ -155,15 +163,17 @@ class GameBoard extends Component {
   render() {
     return (
       <div className="appRender">
-        {/*User feedback text is here*/}
-        <h1>{this.state.feedback}</h1>
-        {/*a button to reset the game only visible after gameover*/}
-        <button
-          className="restartButton"
-          style={{ visibility: this.state.win ? "visible" : "hidden" }}
-        >
-          Play Again
-        </button>
+        {/*User feedback text and reset button  here*/}
+        <div className="feedback">
+          <h1>{this.state.feedback}</h1>
+          <button
+            className="resetButton"
+            onClick={() => this.newGame(this.state.numCards)}
+          >
+            {this.state.buttonText}
+          </button>
+        </div>
+
         {/*The game Cards are here*/}
         <ul className="gameBoard">
           {this.state.allCards.map((value, idx) => (
